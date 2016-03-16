@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+	<jsp:directive.page contentType="text/html; charset=UTF-8" 
+		pageEncoding="UTF-8" session="true"/>
+	<jsp:output doctype-root-element="html"
+		doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
+		doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
+		omit-xml-declaration="true" />
+<html 
+	xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:f="http://java.sun.com/jsp/jstl/fmt">
+<head>
+<title>Foods 'R Us Shopping Cart</title>
+</head>
+<body>
+	<fieldset>	
+	<legend>Shopping Cart</legend>
+	<p class="errorMsg">${error}</p>
+				
+	<div id="cartContents">
+		<table id="cartTable" width="100%">
+			<tr id="headerRow"><td>Number</td><td>Name</td><td>Quantity</td><td>Update</td><td>Price</td><td>Extended Price</td></tr>
+			<c:forEach var="item" items="${cart.content}">
+			<form action="Cart" method="POST">
+				<tr class="cartRow">	
+					<td>${item.value.number}</td>
+					<td>${item.value.name}</td>
+					<td><input type="text" name="itemQty" value="${item.value.quantity}"/></td>
+					<td>
+						<input type="submit" value="Update"/>
+						<input type="hidden" name="itemToAdd" value="${item.value.number}"/>
+					</td>
+					<td><f:formatNumber type="currency">${item.value.price}</f:formatNumber></td>
+					<td><f:formatNumber type="currency">${item.value.extended}</f:formatNumber></td>
+				</tr>
+			</form>
+			</c:forEach>
+		</table>
+	</div>
+
+	<b>Total = </b> <f:formatNumber type="currency">${cart.total}</f:formatNumber><br/>	
+	<b>HST = </b> <f:formatNumber type="currency">${cart.taxes}</f:formatNumber><br/>
+	<b>Shipping = </b> <f:formatNumber type="currency">${cart.shipping}</f:formatNumber><br/>
+	<b>Grand Total = </b> <f:formatNumber type="currency">${cart.grandTotal}</f:formatNumber>
+	
+	<br/><br/>
+	
+	</fieldset>
+		<form action="Catalog" class="inline" method="GET">
+		<input type="submit" value="Continue Shopping" class="button"/>
+	</form>
+	<c:if test="${not empty cart}">
+		<form action="Verify"  class="inline" method="GET">									
+			<input type="submit" value="Place Order" name="place" class="button"></input>					
+		</form>
+	</c:if>
+	
+	
+</body>
+</html>
+</jsp:root>
